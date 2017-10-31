@@ -1,0 +1,32 @@
+Now, open MySQL cli.
+====================
+Command: mysql -u root –p
+
+You have entered mysql prompt. Now create databases and insert tables :
+=======================================================================
+create database testhadoop;
+use testhadoop;
+create table employee (empid int(2), empname varchar(20), salary int(6));
+insert into employee values (1,'John',5000), (2,'Smith',200), (3,'Kathy',5600);
+
+Grant the user access to the database:mysql-connector-java-5.1.42-bin.jar
+======================================
+grant all privileges on *.* to '%'@'localhost';
+grant all privileges on *.* to '*'@'localhost';
+
+Finally exit out of mysql prompt
+================================
+exit
+
+Download mysql connector -> mysql-connector-java-5.1.28.tar.gz using the below
+command :
+wget http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.28.tar.gz
+
+Now untar the file :
+tar zxvf mysql-connector-java-5.1.28.tar.gz
+
+Copy this jar file to /usr/lib/sqoop/lib directory using:
+sudo cp mysql-connector-java-5.1.28/mysql-connector-java-5.1.28-bin.jar /usr/lib/sqoop/lib
+
+Import data from MYSQL to HDFS using SQOOP
+sqoop import --connect jdbc:mysql://127.0.0.1:3306/testhadoop --username root --password password --table employee --m 1

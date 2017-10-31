@@ -1,0 +1,80 @@
+Basic Sqoop Commnad:
+--------------------
+sqoop import
+--connect jdbc:mysql://127.0.0.1:3306/testhadoop \
+--username root \
+--password tiger \
+--table employee \
+--m 1
+
+
+
+Target Dir Command:
+--------------------
+sqoop import --connect jdbc:mysql://127.0.0.1:3306/testhadoop --username root --password tiger --table employee --m 1 --target-dir /user/sqoop/target_sqoop
+
+Condition Sqoop:
+------------------
+sqoop import --connect jdbc:mysql://127.0.0.1:3306/testhadoop --username root --password tiger --table employee --m 1 --target-dir /user/sqoop/where_sqoop --where "salary > 10000"
+
+
+Incremental Sqoop:
+---------------------
+sqoop import \
+--connect jdbc:mysql://127.0.0.1:3306/testhadoop \
+--username root \
+--password tiger \
+--table employee \
+--m 1 \
+--target-dir /user/sqoop/inrement_sqoop \
+--incremental append \
+--check-column empid \
+--last-value 6
+
+Import All Tables:
+------------------
+sqoop import-all-tables \
+--connect jdbc:mysql://127.0.0.1:3306/testhadoop \
+--username root \
+--password tiger \
+--table employee \
+--m 1 \
+
+Sqoop Eval:
+--------------
+sqoop eval \
+--connect jdbc:mysql://127.0.0.1:3306/testhadoop \
+--username root \
+--password tiger \
+--query "select * from employee"
+
+Sqoop Eval INSERT:
+--------------
+sqoop eval \
+--connect jdbc:mysql://127.0.0.1:3306/testhadoop \
+--username root \
+--password tiger \
+--e "INSERT INTO employee VALUES (9,'Johnah',50000)"
+
+Sqoop LIST DATABASES:
+---------------------
+sqoop list-databases \
+--connect jdbc:mysql://127.0.0.1:3306/ \
+--username root \
+--password tiger
+
+
+Sqoop LIST TABLES:
+---------------------
+sqoop list-tables \
+--connect jdbc:mysql://127.0.0.1:3306/testhadoop \
+--username root \
+--password tiger
+
+To get the Source Code that got generated for the Sqoop Job:
+----------------------------------------------------------
+sqoop codegen \
+--connect jdbc:mysql://127.0.0.1:3306/testhadoop \
+--username root \
+--password tiger \
+--table employee

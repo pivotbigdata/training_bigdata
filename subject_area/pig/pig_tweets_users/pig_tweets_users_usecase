@@ -1,0 +1,15 @@
+
+users - userid, name , state
+tweets - tweetid,tweet,userid
+
+
+1.	Write a Pig Latin query that outputs the login of all users in NY state
+2.	Write a Pig Latin query that returns all the tweets that include the word 'favorite', ordered by tweet id
+3.	Write a Pig Latin query that returns the number of tweets for each userid
+4.	Write a Pig Latin query that returns the number of tweets for each userid ordered from most active to least active users
+
+5.	Write a Pig Latin query that returns the name of users that posted at least two tweets
+6.	Write a Pig Latin query that returns the name of users that posted no tweets
+
+7.	Write a Pig Latin query that returns the number of tweets for each user name (not login).
+8.	Write a Pig Latin query that returns the number of tweets for each user name (not login), ordered from most active to least active users

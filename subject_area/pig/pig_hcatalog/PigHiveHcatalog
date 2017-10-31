@@ -1,0 +1,27 @@
+Pig And Hive Using Hcatalog:
+---------------------------
+In order to Launch Pig with Hcatalog properties use the below command:
+
+pig -useHCatalog
+
+Loading data Into A realtion from Hive Table Using "HcatLoader"
+================================================================
+A = LOAD 'staging.employee_canada' USING org.apache.hive.hcatalog.pig.HCatLoader();
+
+Storing Data Into Hive Table Using "HcatStorer"
+===============================================
+STORE A INTO 'dbname.tablename' USING org.apache.hive.hcatalog.pig.HCatStoarer();
+
+
+NOTE:
+----
+While Storing the data Into Hive using Hcatastorer ,scheama names and order should be intact with the final table.
+
+
+How to Run pig file using Hcatalog proerties:
+============================================
+
+pig -useHCatalog -param KEY=VALUE ... -f <PigFileName>
+
+
+
