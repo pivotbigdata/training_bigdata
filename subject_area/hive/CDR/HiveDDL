@@ -1,0 +1,4 @@
+CREATE EXTERNAL TABLE cdr (id STRING,caller_num STRING,
+called_num STRING,start_time STRING,end_time STRING,
+call_type STRING,call_charge DOUBLE,call_result STRING)
+ROW FORMAT DELIMITEDFIELDS TERMINATED BY ','    LOCATION '/data/cdr';
