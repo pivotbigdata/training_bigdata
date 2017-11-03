@@ -1,0 +1,23 @@
+Problem Statement-1 
+How many calls and SMSes subscribers are making.
+
+SELECT caller_num, call_type, COUNT(*)FROM cdr GROUP BY caller_num, call_type;
+
+Problem Statement-2
+We want to find out the total duration of time for which a subscriber is making voice calls:
+
+SELECT caller_num, SUM(UNIX_TIMESTAMP(end_time , "yyyy-MM-dd'T'HH:mm:ss.SSSX") - UNIX_TIMESTAMP(start_time, "yyyy-MM-dd'T'HH:mm:ss.SSSX"))  as duration
+FROM cdr group by caller_num, call_type HAVING  call_type = 'VOICE';
+
+Problem Statement-3
+Find out the customers who spend the most amount of money and offer them better packages.
+
+SELECT caller_num, sum(call_charge) AS bill FROM cdr GROUP BY caller_num ORDER BY bill DESC LIMIT 5;
+
+Problem Statement-4
+Round off the bill as follows:
+SELECT caller_num, round(sum(call_charge)) AS bill FROM cdr GROUP BY caller_numORDER BY bill DESC LIMIT 5;
+
+Problem Statement-5
+Find out how many times a call was placed but the called number was busy:
+SELECT call_result, count(*) FROM cdr GROUP BY call_result;
