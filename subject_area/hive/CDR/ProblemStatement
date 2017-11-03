@@ -1,0 +1,7 @@
+Telecom companies keep records of each and every call made by their subscribers. 
+They also keep information such as when a call was made, who it was made to,
+the start time, end time, and so on. Detailed information, such as SMSes, 
+data sessions, and so on, is also stored by these companies. 
+Here, the problem statement is how we can use this data to make 
+company operations run smoother and help them generate valuable information about their customers.
+
