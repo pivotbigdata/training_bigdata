@@ -1,0 +1,215 @@
+HIVE:
+
+Database 			DataWarehouse
+==========			=============
+OLTP				OLAP
+IUD(Insert,Updt,Delt)		select statements
+Recent data			Existing data
+
+HIVE - DataWarehouse On top hadoop:
+HIVE developed by Facebook
+
+
+HIVE Stores its metadata "Derby","MySql","RDBMS"
+HIVE Stores the actual data into HDFS
+
+hive 
+show databases;
+
+create database hadoop_1;
+
+use hadoop_1;
+
+DESCRIBE FORMATTED <table_name>; (Which will give all the minute details of the table structure)
+DESCRIBE EXTENDED <table_name>; (Which will show the metadata of the table)
+
+hive(june_1_hive)>
+
+set hive.cli.print.current.db=true; -- Available from 0.8 version HIVE - 2233
+set hive.cli.print.header=true;
+
+create table emp2 (e_id int,e_name string,e_sal int,e_dept int)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+1,Sam,10000,10
+2,Ram,20000,20
+3,Tri,20000,10
+
+Loading from Local File system:
+===============================
+LOAD DATA LOCAL INPATH '/home/cloudera/emp1.txt' INTO TABLE emp1;
+
+4,Sammy,40000,30
+5,Peter,55000,20
+6,Sansa,10000,10
+
+Loading from HDFS File System:
+=============================
+LOAD DATA INPATH '/user/cloudera/hive/emp2.txt' INTO TABLE emp1;
+
+When you LOAD data from HDFS HIVE moves the file from source to the Warehouse dir.
+ NOTE- In order to avoid the mv do it in external tables
+
+7,Arya,15000,10
+8,Khal,80000,20
+9,Khalese,60000,30
+
+LOAD DATA [LOCAL] INPATH '/home/cloudera/pig/empJoin' overwrite INTO TABLE emp1;
+
+select * from emp1;
+
+select * from emp2 where e_dept == 10;
+
+select count(*) from emp1;
+
+ALTER TABLE employee
+ADD PARTITION (year=’2013’)
+
+
+Partition are of Two Types:
+---------------------------
+1)Static
+2)Dynamic
+
+Partiotioned table:
+==================
+create table emp_partition2 (e_id int,e_name string,e_sal int,e_dept int)
+partitioned by(e_country string,e_state string)
+row format delimited 
+fields terminated by ',';
+
+
+Manual Partition:
+=================
+
+1)We enter the value for the partition column while we insert the data.
+
+INSERT OVERWRITE directory '/user/cloudera/hive/hive_file' select * from emp1; - By default (\u001) from 0.11 we have custom seperator 
+STATIC PARTITON:
+================
+LOAD DATA LOCAL INPATH '/home/cloudera/emp_n_1.txt' INTO TABLE emp_partition2
+partition(e_country='INDIA',e_state='KAR');
+
+LOAD DATA LOCAL INPATH '/home/cloudera/emp_n_2.txt' INTO TABLE emp_partition2
+partition(e_country='INDIA',e_state='ODI');
+
+LOAD DATA LOCAL INPATH '/home/cloudera/emp_n_3.txt' INTO TABLE emp_partition2
+partition(e_country='INDIA',e_state='MAH');
+
+
+ 
+DynamicPartition:
+=================
+set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.exec.dynamic.partition=true;
+
+create table emp_partition_dyn (e_id int,e_name string,e_sal int,e_dept int)
+partitioned by(e_country string,e_state string)
+row format delimited 
+fields terminated by ',';
+
+INSERT OVERWRITE TABLE emp_partition_dyn PARTITION (e_country,e_state)
+select * from emp_partition;
+
+msck repair <table_name>;
+
+HIVE Performance Tunning:
+-------------------------
+1)Partioning
+2)Bucketing
+3)File Formats(ORC)
+4)Hive Compression codec (Snappy)
+5)Hive batch size set 100
+
+
+6,Sansa,10000,10,IND,KAR
+7,Arya,15000,10,USA,OHIO
+8,Khal,80000,20,
+9,Khalese,60000,30
+
+
+create external table emp_partition_dyn_ext (e_id int,e_name string,e_sal int,e_dept int)
+partitioned by(e_country string,e_state string)
+row format delimited 
+fields terminated by ','
+location '/user/cloudera/hive_ext/';
+
+INTERNAL TABLE:
+---------------
+-> Data is managed by HIVE server.
+-> DROP tablename;
+	1)Table gets dropped
+	2)File is also removed
+	
+
+Bucketing:
+
+
+
+
+EXTERNAL TABLE:
+---------------
+-> Data is maintained at HDFS.
+    	1)Table structure gets dropped.
+	2)Data is not dropped as it is maintained by HDFS
+
+
+
+==================================================================
+HIVE UDF:
+----------
+
+unix_time.txt
+-------------
+one,1386023259550
+two,1389523259550
+three,1389523259550
+four,1389523259550
+
+CREATE TABLE new_u_data ( userid STRING,unixtime STRING) 
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+STORED AS TEXTFILE;
+
+LOAD DATA LOCAL INPATH '/home/cloudera/unix_time.txt' OVERWRITE INTO TABLE new_u_data;
+jar -tvf Hive.jar
+
+ADD JAR /home/cloudera/Hive.jar;
+
+create temporary function dat_tm as 'UnixtimeToDate';
+
+select userid,dat_tm(unixtime) from new_u_data;
+
+
+=======================================================================
+HIVE UDF:
+---------
+SAMPAT
+KUMAR
+HADOOP
+PIG
+
+jar -tvf Hive_low.jar
+
+CREATE TABLE lower (name STRING);
+
+LOAD DATA LOCAL INPATH '/home/cloudera/hive_low1.txt' OVERWRITE INTO TABLE lower;
+
+ADD JAR /home/cloudera/Hive_low.jar
+
+create temporary function demo_lower as 'Lower';
+
+select demo_lower(name) from lower;
+
+
+
+
+
+
+
+
+
+
+
